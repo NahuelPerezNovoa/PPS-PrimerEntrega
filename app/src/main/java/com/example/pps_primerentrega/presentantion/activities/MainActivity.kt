@@ -68,7 +68,7 @@ fun Greeting(modifier: Modifier = Modifier, name: String, callback: () -> Unit) 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Bienvenido $name!",
+            text = "Bienvenido $name",
             modifier = modifier
         )
 

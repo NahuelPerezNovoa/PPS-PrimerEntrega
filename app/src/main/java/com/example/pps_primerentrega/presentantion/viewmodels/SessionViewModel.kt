@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pps_primerentrega.utils.FirebaseAuthErrorHandler
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
@@ -35,7 +36,7 @@ class SessionViewModel(val activity: Activity): ViewModel() {
                     Log.wtf("SessionViewModel", "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         activity,
-                        "Authentication failed.",
+                        FirebaseAuthErrorHandler.getErrorMessage(task.exception!!),
                         Toast.LENGTH_LONG,
                     ).show()
                 }
@@ -54,7 +55,7 @@ class SessionViewModel(val activity: Activity): ViewModel() {
                     Log.wtf("SessionViewModel", "signInWithEmail:failure", task.exception)
                     Toast.makeText(
                         activity,
-                        "Authentication failed.",
+                        FirebaseAuthErrorHandler.getErrorMessage(task.exception!!),
                         Toast.LENGTH_LONG,
                     ).show()
                 }
