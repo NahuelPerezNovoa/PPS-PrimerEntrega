@@ -1,4 +1,4 @@
-package com.example.pps_primerentrega.ui.theme
+package com.example.pps_primerentrega.presentantion.ui.theme
 
 import android.app.Activity
 import android.os.Build
