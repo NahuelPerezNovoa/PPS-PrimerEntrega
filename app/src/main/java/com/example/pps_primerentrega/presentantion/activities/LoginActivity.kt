@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -43,7 +44,7 @@ class LoginActivity : ComponentActivity() {
         viewModel = ViewModelProvider(this, factory)[SessionViewModel::class.java]
         viewModel.user.observe(this){
             Log.wtf("LoginActivity", "User: $it")
-            if(!it.isNullOrEmpty()){
+            if(it != null){
                 this.startActivity(Intent(this, MainActivity::class.java))
                 this.finish()
             }
@@ -54,11 +55,7 @@ class LoginActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     LoginView (
                         modifier = Modifier.padding(innerPadding),
-                        callback = { email:String, password:String ->
-                            CoroutineScope(Dispatchers.IO).launch {
-                                viewModel.login(email, password)
-                            }
-                        }
+                        viewModel = viewModel
                     )
                 }
             }
@@ -69,7 +66,7 @@ class LoginActivity : ComponentActivity() {
 
 
 @Composable
-fun LoginView(modifier: Modifier = Modifier, callback: (String, String) -> Unit) {
+fun LoginView(modifier: Modifier = Modifier, viewModel: SessionViewModel) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
      Column(
@@ -98,10 +95,21 @@ fun LoginView(modifier: Modifier = Modifier, callback: (String, String) -> Unit)
                      onValueChange = { password = it },
                      label = { Text("Password") }
                  )
-                 Button(onClick = {
-                     callback(email, password)
-                 }) {
-                     Text("Login")
+                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                     Button(onClick = {
+                         CoroutineScope(Dispatchers.IO).launch {
+                             viewModel.signUp(email, password)
+                         }
+                     }) {
+                         Text("SIGN UP")
+                     }
+                     Button(onClick = {
+                         CoroutineScope(Dispatchers.IO).launch {
+                             viewModel.login(email, password)
+                         }
+                     }) {
+                         Text("LOG IN")
+                     }
                  }
              }
          }

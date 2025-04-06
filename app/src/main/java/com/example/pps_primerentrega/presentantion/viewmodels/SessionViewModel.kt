@@ -1,49 +1,70 @@
 package com.example.pps_primerentrega.presentantion.viewmodels
 import android.app.Activity
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class SessionViewModel(val activity: Activity): ViewModel() {
 
-    private val USER_PREFERENCES_FILE_NAME = "user_preferences"
-    private val USER_PREFERENCES_EMAIL_KEY = "user_email"
-    private val sharedPref = activity.getSharedPreferences(USER_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
-    var user : MutableLiveData<String?>
+    var user : MutableLiveData<FirebaseUser?>
     private set
 
+    var error = MutableLiveData("")
+
+    private val auth = Firebase.auth
+
     init {
-        val email = sharedPref.getString(USER_PREFERENCES_EMAIL_KEY, "")
-        user = MutableLiveData(email)
+        user = MutableLiveData(auth.currentUser)
+        Log.wtf("SessionViewModel AUTH", "User: ${auth.currentUser}")
     }
 
+    fun signUp(email: String, password: String){
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.wtf("SessionViewModel", "createUserWithEmail:success")
+                    user.value = auth.currentUser
+                } else {
+                    Log.wtf("SessionViewModel", "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        activity,
+                        "Authentication failed.",
+                        Toast.LENGTH_LONG,
+                    ).show()
+                }
+            }
+    }
 
-    suspend fun login(email: String, password: String){
-        withContext(Dispatchers.Main){
-            setUser(email)
-        }
+    fun login(email: String, password: String){
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.wtf("SessionViewModel", "signInWithEmail:success")
+                    user.value = auth.currentUser
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.wtf("SessionViewModel", "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        activity,
+                        "Authentication failed.",
+                        Toast.LENGTH_LONG,
+                    ).show()
+                }
+            }
     }
 
     suspend fun logOut(){
-        setUser(null)
-    }
-
-    private suspend fun getUser(){
-        val email = sharedPref.getString(USER_PREFERENCES_EMAIL_KEY, "")
+        auth.signOut()
         withContext(Dispatchers.Main){
-            user.value = email
-        }
-    }
-
-    private suspend fun setUser(email: String?){
-        with (sharedPref.edit()) {
-            putString(USER_PREFERENCES_EMAIL_KEY, email)
-            apply()
-        }
-        withContext(Dispatchers.Main){
-            user.value = email
+            user.value = null
         }
     }
 }

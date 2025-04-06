@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "117612881018",
+    "project_id": "pps-primer-entrega",
+    "storage_bucket": "pps-primer-entrega.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117612881018:android:c37454c40899045eacc7c3",
+        "android_client_info": {
+          "package_name": "com.example.pps_primerentrega"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMeKrUNhmPqD2s9Sbt00PlMYRYESFxRwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

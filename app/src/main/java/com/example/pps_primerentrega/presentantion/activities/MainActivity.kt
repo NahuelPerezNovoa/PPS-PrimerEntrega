@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
         viewModel = ViewModelProvider(this, factory)[SessionViewModel::class.java]
         viewModel.user.observe(this){
             Log.wtf("MainActivity", "User: $it")
-            if(it.isNullOrEmpty()){
+            if(it == null){
                 this.startActivity(Intent(this, LoginActivity::class.java))
                 this.finish()
             }
@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
             PPSPrimerEntregaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = viewModel.user.value ?: "Usuario",
+                        name = viewModel.user.value?.email ?: "Usuario",
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         CoroutineScope(Dispatchers.IO).launch {
