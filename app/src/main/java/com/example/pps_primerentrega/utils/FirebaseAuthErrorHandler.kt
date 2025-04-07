@@ -11,13 +11,13 @@ object FirebaseAuthErrorHandler {
 
     fun getErrorMessage(exception: Exception): String {
         return when (exception) {
-            is FirebaseAuthInvalidCredentialsException -> "El correo electrónico o la contraseña son inválidos. Por favor, verifica la información ingresada."
-            is FirebaseAuthUserCollisionException -> "Ya existe una cuenta registrada con este correo electrónico. Intenta iniciar sesión o usar otra dirección de correo."
-            is FirebaseAuthWeakPasswordException -> "La contraseña es demasiado débil. Por favor, elige una contraseña más segura."
-            is FirebaseAuthInvalidUserException -> "No se encontró un usuario con el correo ingresado. Verifica el correo o regístrate."
+            is FirebaseAuthInvalidCredentialsException -> "El correo electrónico o la contraseña son inválidos."
+            is FirebaseAuthUserCollisionException -> "Ya existe una cuenta registrada con este correo."
+            is FirebaseAuthWeakPasswordException -> "La contraseña es demasiado débil."
+            is FirebaseAuthInvalidUserException -> "No se encontró un usuario con el correo ingresado."
             is FirebaseAuthRecentLoginRequiredException -> "Se requiere haber iniciado sesión recientemente para realizar esta operación."
-            is FirebaseNetworkException -> "Hubo un problema con la conexión a Internet. Por favor, verifica tu conexión e inténtalo nuevamente."
-            else -> "Ocurrió un error inesperado. Por favor, inténtalo nuevamente o contacta al soporte."
+            is FirebaseNetworkException -> "Hubo un problema con la conexión a Internet."
+            else -> "Ocurrió un error inesperado."
         }
     }
 }
